@@ -1,0 +1,298 @@
+/**
+ * Lily & Steel — Life Path calculator + Blueprint generator
+ * Drop this into your Replit project (Node/React/Next/Vite—works anywhere JS runs).
+ *
+ * Assumptions:
+ * - You saved the big JSON I sent as `content.json` and imported/loaded it into `config`.
+ * - You want master numbers preserved at the final reduction step: 11, 22, 33.
+ * - You want a clean “Blueprint” object to render on the result page.
+ */
+
+/** -----------------------------
+ * 1) LIFE PATH CALCULATION
+ * ------------------------------*/
+
+/**
+ * Sum digits of a number (e.g., 1987 -> 1+9+8+7=25)
+ */
+function sumDigits(n) {
+  return String(Math.abs(n))
+    .split("")
+    .reduce((acc, ch) => acc + (ch >= "0" && ch <= "9" ? Number(ch) : 0), 0);
+}
+
+/**
+ * Reduce a number down, preserving master numbers (11/22/33) when encountered.
+ * Example: 29 -> 11 (2+9=11) returns 11, not 2.
+ */
+function reduceWithMasters(n, masters = new Set([11, 22, 33])) {
+  let x = n;
+
+  while (x > 9 && !masters.has(x)) {
+    x = sumDigits(x);
+  }
+  return x;
+}
+
+/**
+ * Calculate Life Path from birthdate.
+ * Accepts either:
+ *  - Date object
+ *  - ISO-like string: "1967-05-05"
+ *  - US-like string: "05/05/1967" or "5/5/1967"
+ *
+ * Standard numerology approach used here:
+ * - sum all digits of YYYYMMDD, then reduce with masters at the end.
+ * Example: 1967-05-05 => 1+9+6+7+0+5+0+5=33 => returns 33
+ */
+function calculateLifePath(input, masters = new Set([11, 22, 33])) {
+  let year, month, day;
+
+  if (input instanceof Date) {
+    year = input.getFullYear();
+    month = input.getMonth() + 1;
+    day = input.getDate();
+  } else if (typeof input === "string") {
+    const s = input.trim();
+
+    // Try ISO YYYY-MM-DD
+    const iso = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+    if (iso) {
+      year = Number(iso[1]);
+      month = Number(iso[2]);
+      day = Number(iso[3]);
+    } else {
+      // Try US MM/DD/YYYY
+      const us = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (!us) throw new Error("Invalid date format. Use YYYY-MM-DD or MM/DD/YYYY.");
+      month = Number(us[1]);
+      day = Number(us[2]);
+      year = Number(us[3]);
+    }
+  } else {
+    throw new Error("Invalid birthdate input type.");
+  }
+
+  // Basic sanity checks (lightweight)
+  if (
+    !Number.isInteger(year) || year < 1000 || year > 9999 ||
+    !Number.isInteger(month) || month < 1 || month > 12 ||
+    !Number.isInteger(day) || day < 1 || day > 31
+  ) {
+    throw new Error("Birthdate values out of range.");
+  }
+
+  // Sum digits of YYYYMMDD (no separators)
+  const digits = `${year}${String(month).padStart(2, "0")}${String(day).padStart(2, "0")}`
+    .split("")
+    .map(Number);
+
+  const total = digits.reduce((a, b) => a + b, 0);
+  return reduceWithMasters(total, masters);
+}
+
+/** -----------------------------
+ * 2) CONFIG HELPERS (from content.json)
+ * ------------------------------*/
+
+/**
+ * Pick a default core crystal when a Life Path has multiple options.
+ * Strategy:
+ * - If inventory set provided, pick first available in inventory.
+ * - Else pick first in list.
+ */
+function chooseCoreCrystalId(lifePathEntry, inventorySet) {
+  const ids = lifePathEntry?.core_crystal_ids ?? [];
+  if (!ids.length) return null;
+
+  if (inventorySet && inventorySet.size > 0) {
+    const available = ids.find((id) => inventorySet.has(id));
+    if (available) return available;
+  }
+  return ids[0];
+}
+
+/**
+ * Recommend a motion support crystal.
+ * Strategy:
+ * - Show overlap between Life Path options and motion list first.
+ * - Otherwise default to first motion recommendation.
+ * - If inventory provided, prefer in-stock.
+ */
+function chooseSupportCrystalId({ lifePathEntry, motionEntry, inventorySet }) {
+  const lpIds = new Set(lifePathEntry?.core_crystal_ids ?? []);
+  const motionIds = motionEntry?.recommended_crystal_ids ?? [];
+
+  // Overlap first
+  const overlap = motionIds.filter((id) => lpIds.has(id));
+
+  const candidates = overlap.length ? overlap : motionIds;
+
+  if (inventorySet && inventorySet.size > 0) {
+    const inStock = candidates.find((id) => inventorySet.has(id));
+    if (inStock) return inStock;
+  }
+  return candidates[0] ?? null;
+}
+
+/** -----------------------------
+ * 3) BLUEPRINT GENERATOR
+ * ------------------------------*/
+
+/**
+ * Build a final Blueprint object for your results page.
+ *
+ * Inputs:
+ * - config: the JSON object from content.json
+ * - birthdate: string or Date (optional if lifePathNumber provided)
+ * - lifePathNumber: number (optional if birthdate provided)
+ * - productOptionId: "bracelet_only" | "bracelet_plus_core" | "bracelet_plus_core_plus_motion"
+ * - motionId: "contraction" | "stillness" | "harmonizing" | "expansion" (required only if product option includes motion support)
+ * - overrides:
+ *    - selectedCoreCrystalId (optional)
+ *    - selectedSupportCrystalId (optional)
+ *    - selectedBraceletStyleId (optional)
+ * - inventory: array of crystal ids you stock (optional, recommended)
+ */
+function generateBlueprint({
+  config,
+  birthdate,
+  lifePathNumber,
+  productOptionId,
+  motionId,
+  overrides = {},
+  inventory = []
+}) {
+  if (!config) throw new Error("Missing config.");
+
+  const inventorySet = new Set(inventory);
+
+  // Determine life path number
+  const lpNum = lifePathNumber ?? calculateLifePath(birthdate);
+  const lpEntry = config.life_paths[String(lpNum)];
+  if (!lpEntry) throw new Error(`No life path entry found for ${lpNum}.`);
+
+  const productOption = config.generation_rules.product_options[productOptionId];
+  if (!productOption) throw new Error("Invalid product option.");
+
+  // Core crystal
+  const coreCrystalId = productOption.include_core_crystal
+    ? (overrides.selectedCoreCrystalId ?? chooseCoreCrystalId(lpEntry, inventorySet))
+    : null;
+
+  const coreCrystal = coreCrystalId ? config.crystals[coreCrystalId] : null;
+
+  // Motion (optional)
+  const needsMotion = Boolean(productOption.include_motion_support);
+  const motionEntry = needsMotion ? config.motion_states[motionId] : null;
+  if (needsMotion && !motionEntry) throw new Error("Motion state required for this product option.");
+
+  // Bracelet style
+  const braceletStyleId =
+    overrides.selectedBraceletStyleId ??
+    (motionEntry ? motionEntry.recommended_bracelet_style_id : "lily_witness"); // default if no motion chosen
+
+  const braceletStyle = config.bracelet_styles[braceletStyleId] ?? null;
+
+  // Support crystal (optional)
+  const supportCrystalId = needsMotion
+    ? (overrides.selectedSupportCrystalId ??
+        chooseSupportCrystalId({ lifePathEntry: lpEntry, motionEntry, inventorySet }))
+    : null;
+
+  // Don’t duplicate the same stone twice (if core and support collide)
+  let finalSupportCrystalId = supportCrystalId;
+  if (coreCrystalId && supportCrystalId && coreCrystalId === supportCrystalId) {
+    // pick next option from motion list
+    const motionList = motionEntry.recommended_crystal_ids || [];
+    finalSupportCrystalId = motionList.find((id) => id !== coreCrystalId && (!inventorySet.size || inventorySet.has(id))) || null;
+  }
+
+  const supportCrystal = finalSupportCrystalId ? config.crystals[finalSupportCrystalId] : null;
+
+  // Enforce max crystals selected
+  const selectedCrystals = [coreCrystalId, finalSupportCrystalId].filter(Boolean);
+  const max = config.app_config?.limits?.max_crystals_selected ?? 2;
+  const limitedCrystals = selectedCrystals.slice(0, max);
+
+  // Meaning paragraph (short, premium)
+  const parts = [];
+  parts.push(`Your Life Path reflects how ME learns itself: ${lpEntry.title}.`);
+  if (motionEntry) parts.push(`Your current Motion reflects how ME is moving right now: ${motionEntry.display_name}.`);
+  if (limitedCrystals.length) parts.push(`Your crystal${limitedCrystals.length > 1 ? "s" : ""} support this with grounded intention—support, not prediction.`);
+
+  const meaningParagraph = parts.join(" ");
+
+  // Affirmations
+  const affirmations = [];
+  affirmations.push(lpEntry.me_affirmation);
+  if (motionEntry) affirmations.push(motionEntry.affirmation);
+
+  return {
+    life_path: {
+      number: lpEntry.number,
+      title: lpEntry.title,
+      subtitle: lpEntry.subtitle,
+      meaning: lpEntry.meaning,
+      affirmation: lpEntry.me_affirmation
+    },
+    motion: motionEntry
+      ? {
+          id: motionEntry.id,
+          display_name: motionEntry.display_name,
+          subtitle: motionEntry.subtitle,
+          description: motionEntry.description,
+          affirmation: motionEntry.affirmation
+        }
+      : null,
+    bracelet_style: braceletStyle
+      ? {
+          id: braceletStyle.id,
+          display_name: braceletStyle.display_name,
+          symbol: braceletStyle.symbol,
+          motion: braceletStyle.motion,
+          short_desc: braceletStyle.short_desc
+        }
+      : null,
+    crystals: {
+      core: coreCrystal
+        ? { id: coreCrystal.id, display_name: coreCrystal.display_name, short_desc: coreCrystal.short_desc }
+        : null,
+      support: supportCrystal
+        ? { id: supportCrystal.id, display_name: supportCrystal.display_name, short_desc: supportCrystal.short_desc }
+        : null,
+      selected_ids: limitedCrystals
+    },
+    product_option: { id: productOptionId, label: productOption.label },
+    meaning_paragraph: meaningParagraph,
+    me_affirmations: affirmations
+  };
+}
+
+/** -----------------------------
+ * 4) EXAMPLES (quick test)
+ * ------------------------------*/
+
+// Example: assume you imported config like:
+// import config from "./content.json" assert { type: "json" };
+// const config = require("./content.json");
+
+// Example inventory (optional but recommended):
+// const inventory = ["pyrite","tigers_eye","citrine","amethyst","rose_quartz","black_tourmaline","smoky_quartz","hematite","red_jasper","clear_quartz","selenite","moonstone","lapis_lazuli","labradorite","amazonite","green_aventurine","rhodonite","pink_opal","carnelian","sunstone","yellow_jade","black_obsidian"];
+
+// Example usage:
+// const blueprint = generateBlueprint({
+//   config,
+//   birthdate: "05/05/1967",
+//   productOptionId: "bracelet_plus_core_plus_motion",
+//   motionId: "stillness",
+//   inventory
+// });
+// console.log(blueprint);
+
+export {
+  calculateLifePath,
+  generateBlueprint,
+  reduceWithMasters,
+  sumDigits
+};
