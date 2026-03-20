@@ -1,0 +1,457 @@
+{
+  "schema_version": "1.0.0",
+  "app_config": {
+    "brand": "Lily & Steel",
+    "voice_rules": {
+      "allowed_verbs": ["supports", "reflects", "invites", "helps", "guides"],
+      "avoid_verbs": ["guarantees", "predicts", "will happen", "fixes", "cures"],
+      "core_prompt": "What is ME doing right now?"
+    },
+    "limits": {
+      "max_crystals_selected": 2,
+      "allow_bracelet_only": true
+    }
+  },
+  "bracelet_styles": {
+    "tulip_root": {
+      "id": "tulip_root",
+      "display_name": "The Root",
+      "symbol": "Tulip",
+      "motion": "contraction",
+      "short_desc": "For grounding, protection, and inner holding."
+    },
+    "lily_witness": {
+      "id": "lily_witness",
+      "display_name": "The Witness",
+      "symbol": "Lily",
+      "motion": "stillness",
+      "short_desc": "For clarity, reflection, and calm awareness."
+    },
+    "doublelily_integration": {
+      "id": "doublelily_integration",
+      "display_name": "The Integration",
+      "symbol": "Double Lily",
+      "motion": "harmonizing",
+      "short_desc": "For balance, wholeness, and embodied healing."
+    },
+    "bloom_bloom": {
+      "id": "bloom_bloom",
+      "display_name": "The Bloom",
+      "symbol": "Bloom",
+      "motion": "expansion",
+      "short_desc": "For joy, confidence, and forward growth."
+    }
+  },
+  "crystals": {
+    "black_obsidian": {
+      "id": "black_obsidian",
+      "display_name": "Black Obsidian",
+      "motions": ["contraction"],
+      "tags": ["protection", "release", "grounding"],
+      "short_desc": "Supports emotional release while keeping ME grounded."
+    },
+    "smoky_quartz": {
+      "id": "smoky_quartz",
+      "display_name": "Smoky Quartz",
+      "motions": ["contraction"],
+      "tags": ["grounding", "stress_support"],
+      "short_desc": "Supports stress relief and stabilizing energy."
+    },
+    "hematite": {
+      "id": "hematite",
+      "display_name": "Hematite",
+      "motions": ["contraction"],
+      "tags": ["stability", "embodiment"],
+      "short_desc": "Supports stability and body-based grounding."
+    },
+    "red_jasper": {
+      "id": "red_jasper",
+      "display_name": "Red Jasper",
+      "motions": ["contraction"],
+      "tags": ["endurance", "strength"],
+      "short_desc": "Supports steady resilience and emotional strength."
+    },
+    "black_tourmaline": {
+      "id": "black_tourmaline",
+      "display_name": "Black Tourmaline",
+      "motions": ["contraction"],
+      "tags": ["boundaries", "grounding"],
+      "short_desc": "Supports emotional boundaries and a sense of safety."
+    },
+    "amethyst": {
+      "id": "amethyst",
+      "display_name": "Amethyst",
+      "motions": ["stillness"],
+      "tags": ["calm", "clarity", "intuition"],
+      "short_desc": "Supports calm clarity and inner awareness."
+    },
+    "selenite": {
+      "id": "selenite",
+      "display_name": "Selenite",
+      "motions": ["stillness"],
+      "tags": ["clarity", "softness"],
+      "short_desc": "Supports clarity and quiet inner space."
+    },
+    "clear_quartz": {
+      "id": "clear_quartz",
+      "display_name": "Clear Quartz",
+      "motions": ["stillness"],
+      "tags": ["clarity", "amplify", "integration"],
+      "short_desc": "Supports clarity and integration; amplifies intention."
+    },
+    "lepidolite": {
+      "id": "lepidolite",
+      "display_name": "Lepidolite",
+      "motions": ["stillness"],
+      "tags": ["soothing", "regulation"],
+      "short_desc": "Supports emotional regulation and nervous-system calm."
+    },
+    "moonstone": {
+      "id": "moonstone",
+      "display_name": "Moonstone",
+      "motions": ["stillness"],
+      "tags": ["intuition", "softness"],
+      "short_desc": "Supports intuitive listening and emotional softness."
+    },
+    "lapis_lazuli": {
+      "id": "lapis_lazuli",
+      "display_name": "Lapis Lazuli",
+      "motions": ["stillness"],
+      "tags": ["truth", "wisdom", "perception"],
+      "short_desc": "Supports inner truth, wisdom, and self-knowing."
+    },
+    "rose_quartz": {
+      "id": "rose_quartz",
+      "display_name": "Rose Quartz",
+      "motions": ["harmonizing"],
+      "tags": ["self_love", "compassion"],
+      "short_desc": "Supports compassion and a gentle self-relationship."
+    },
+    "rhodonite": {
+      "id": "rhodonite",
+      "display_name": "Rhodonite",
+      "motions": ["harmonizing"],
+      "tags": ["healing", "forgiveness"],
+      "short_desc": "Supports emotional healing and integration of the past."
+    },
+    "amazonite": {
+      "id": "amazonite",
+      "display_name": "Amazonite",
+      "motions": ["harmonizing"],
+      "tags": ["balance", "honest_expression"],
+      "short_desc": "Supports balanced communication and emotional steadiness."
+    },
+    "green_aventurine": {
+      "id": "green_aventurine",
+      "display_name": "Green Aventurine",
+      "motions": ["harmonizing"],
+      "tags": ["renewal", "heart"],
+      "short_desc": "Supports heart renewal and gentle, steady growth."
+    },
+    "pink_opal": {
+      "id": "pink_opal",
+      "display_name": "Pink Opal",
+      "motions": ["harmonizing"],
+      "tags": ["soothing", "self_connection"],
+      "short_desc": "Supports emotional soothing and inner tenderness."
+    },
+    "labradorite": {
+      "id": "labradorite",
+      "display_name": "Labradorite",
+      "motions": ["harmonizing"],
+      "tags": ["transformation", "intuition"],
+      "short_desc": "Supports identity shifts and integrating intuitive insight."
+    },
+    "citrine": {
+      "id": "citrine",
+      "display_name": "Citrine",
+      "motions": ["expansion"],
+      "tags": ["optimism", "growth"],
+      "short_desc": "Supports optimism and opening to possibility."
+    },
+    "carnelian": {
+      "id": "carnelian",
+      "display_name": "Carnelian",
+      "motions": ["expansion"],
+      "tags": ["creativity", "vitality"],
+      "short_desc": "Supports creativity, confidence, and life force."
+    },
+    "sunstone": {
+      "id": "sunstone",
+      "display_name": "Sunstone",
+      "motions": ["expansion"],
+      "tags": ["joy", "confidence"],
+      "short_desc": "Supports joy, warmth, and empowered momentum."
+    },
+    "tigers_eye": {
+      "id": "tigers_eye",
+      "display_name": "Tiger’s Eye",
+      "motions": ["expansion"],
+      "tags": ["courage", "focus"],
+      "short_desc": "Supports grounded courage and confident forward steps."
+    },
+    "yellow_jade": {
+      "id": "yellow_jade",
+      "display_name": "Yellow Jade",
+      "motions": ["expansion"],
+      "tags": ["optimism", "strength"],
+      "short_desc": "Supports emotional strength with gentle optimism."
+    },
+    "pyrite": {
+      "id": "pyrite",
+      "display_name": "Pyrite",
+      "motions": ["expansion"],
+      "tags": ["will", "confidence", "power"],
+      "short_desc": "Supports confidence, will, and embodied direction."
+    }
+  },
+  "motion_states": {
+    "contraction": {
+      "id": "contraction",
+      "display_name": "Contraction",
+      "subtitle": "The Root",
+      "description": "ME is protecting, grounding, and gathering inward.",
+      "when_to_choose": [
+        "healing seasons",
+        "recovery and rebuilding",
+        "overwhelm or emotional tenderness",
+        "needing boundaries and grounding"
+      ],
+      "affirmation": "ME is allowed to hold itself.",
+      "recommended_bracelet_style_id": "tulip_root",
+      "recommended_crystal_ids": [
+        "black_obsidian",
+        "smoky_quartz",
+        "hematite",
+        "red_jasper",
+        "black_tourmaline"
+      ]
+    },
+    "stillness": {
+      "id": "stillness",
+      "display_name": "Stillness",
+      "subtitle": "The Witness",
+      "description": "ME is resting, observing, and remembering.",
+      "when_to_choose": [
+        "reflection and prayer",
+        "seeking clarity",
+        "nervous-system calming",
+        "intuition and inner listening"
+      ],
+      "affirmation": "In stillness, ME remembers itself.",
+      "recommended_bracelet_style_id": "lily_witness",
+      "recommended_crystal_ids": [
+        "amethyst",
+        "selenite",
+        "clear_quartz",
+        "lepidolite",
+        "moonstone",
+        "lapis_lazuli"
+      ]
+    },
+    "harmonizing": {
+      "id": "harmonizing",
+      "display_name": "Harmonizing",
+      "subtitle": "The Integration",
+      "description": "ME is balancing, integrating, and becoming whole.",
+      "when_to_choose": [
+        "emotional balance work",
+        "self-relationship healing",
+        "rebuilding after survival",
+        "integrating lessons into daily life"
+      ],
+      "affirmation": "ME is allowed to become whole.",
+      "recommended_bracelet_style_id": "doublelily_integration",
+      "recommended_crystal_ids": [
+        "rose_quartz",
+        "rhodonite",
+        "amazonite",
+        "green_aventurine",
+        "pink_opal",
+        "labradorite"
+      ]
+    },
+    "expansion": {
+      "id": "expansion",
+      "display_name": "Expansion",
+      "subtitle": "The Bloom",
+      "description": "ME is opening, expressing, and engaging life.",
+      "when_to_choose": [
+        "new beginnings",
+        "creative seasons",
+        "confidence building",
+        "growth and celebration"
+      ],
+      "affirmation": "ME is allowed to open to life.",
+      "recommended_bracelet_style_id": "bloom_bloom",
+      "recommended_crystal_ids": [
+        "citrine",
+        "carnelian",
+        "sunstone",
+        "tigers_eye",
+        "yellow_jade",
+        "pyrite"
+      ]
+    }
+  },
+  "life_paths": {
+    "1": {
+      "number": 1,
+      "title": "Identity",
+      "subtitle": "The Origin of ME",
+      "meaning": "ME learns itself as an origin point—through courage, choice, and self-definition.",
+      "me_affirmation": "ME is the beginning. ME is allowed to emerge and choose.",
+      "core_crystal_ids": ["pyrite", "tigers_eye"],
+      "core_crystal_note": "Choose one as the default core crystal based on availability or user preference."
+    },
+    "2": {
+      "number": 2,
+      "title": "Connection",
+      "subtitle": "The Reflective ME",
+      "meaning": "ME learns itself through feeling and relationship—without disappearing in others.",
+      "me_affirmation": "ME is safe to feel, sense, and reflect.",
+      "core_crystal_ids": ["moonstone", "amazonite"]
+    },
+    "3": {
+      "number": 3,
+      "title": "Expression",
+      "subtitle": "The Expressive ME",
+      "meaning": "ME learns itself through expression—through creativity, emotion, and voice.",
+      "me_affirmation": "What flows from ME teaches ME who I am.",
+      "core_crystal_ids": ["carnelian"]
+    },
+    "4": {
+      "number": 4,
+      "title": "Stability",
+      "subtitle": "The Stabilizing ME",
+      "meaning": "ME learns itself through grounding—building what can hold my becoming.",
+      "me_affirmation": "ME creates safety through presence and consistency.",
+      "core_crystal_ids": ["hematite", "red_jasper"]
+    },
+    "5": {
+      "number": 5,
+      "title": "Freedom",
+      "subtitle": "The Liberating ME",
+      "meaning": "ME learns itself through movement and change—expanding through experience.",
+      "me_affirmation": "ME expands through movement and change.",
+      "core_crystal_ids": ["citrine"]
+    },
+    "6": {
+      "number": 6,
+      "title": "Love",
+      "subtitle": "The Harmonizing ME",
+      "meaning": "ME learns itself through love—balanced care, compassion, and self-relationship.",
+      "me_affirmation": "ME is the source of the love I give.",
+      "core_crystal_ids": ["rose_quartz", "green_aventurine"]
+    },
+    "7": {
+      "number": 7,
+      "title": "Awareness",
+      "subtitle": "The Observing ME",
+      "meaning": "ME learns itself through awareness—stillness, reflection, and inner truth.",
+      "me_affirmation": "In stillness, ME remembers itself.",
+      "core_crystal_ids": ["amethyst", "lapis_lazuli"]
+    },
+    "8": {
+      "number": 8,
+      "title": "Power",
+      "subtitle": "The Directing ME",
+      "meaning": "ME learns itself through responsible power—value, leadership, and embodiment.",
+      "me_affirmation": "ME directs energy with clarity and worth.",
+      "core_crystal_ids": ["pyrite"]
+    },
+    "9": {
+      "number": 9,
+      "title": "Compassion",
+      "subtitle": "The Transcending ME",
+      "meaning": "ME learns itself through compassion—release, completion, and expansion beyond self.",
+      "me_affirmation": "ME honors what has completed its teaching.",
+      "core_crystal_ids": ["clear_quartz"]
+    },
+    "11": {
+      "number": 11,
+      "title": "Illumination",
+      "subtitle": "The Illuminating ME",
+      "meaning": "ME learns itself through subtle awareness—intuition, sensitivity, and inner light.",
+      "me_affirmation": "ME trusts inner light.",
+      "core_crystal_ids": ["labradorite", "selenite"]
+    },
+    "22": {
+      "number": 22,
+      "title": "Creation",
+      "subtitle": "The Architecting ME",
+      "meaning": "ME learns itself through creation—bringing vision into grounded form.",
+      "me_affirmation": "ME grounds vision into form.",
+      "core_crystal_ids": ["clear_quartz", "tigers_eye"]
+    },
+    "33": {
+      "number": 33,
+      "title": "Service",
+      "subtitle": "The Compassionate ME",
+      "meaning": "ME learns itself through embodied love—compassion without self-abandonment.",
+      "me_affirmation": "ME is the channel, not the burden.",
+      "core_crystal_ids": ["rose_quartz", "amethyst"],
+      "core_crystal_note": "Default to Rose Quartz as core; offer Amethyst as optional add-on or as the support crystal."
+    }
+  },
+  "generation_rules": {
+    "default_flow": [
+      "calculate_or_select_life_path",
+      "show_life_path_meaning_and_core_crystal",
+      "ask_product_option",
+      "if_needs_motion_then_ask_motion_state",
+      "recommend_bracelet_style_from_motion",
+      "recommend_support_crystals_from_motion",
+      "enforce_crystal_selection_limit",
+      "generate_blueprint"
+    ],
+    "product_options": {
+      "bracelet_only": {
+        "id": "bracelet_only",
+        "label": "Bracelet only (number charm)",
+        "include_core_crystal": false,
+        "include_motion_support": false
+      },
+      "bracelet_plus_core": {
+        "id": "bracelet_plus_core",
+        "label": "Bracelet + Life Path crystal",
+        "include_core_crystal": true,
+        "include_motion_support": false
+      },
+      "bracelet_plus_core_plus_motion": {
+        "id": "bracelet_plus_core_plus_motion",
+        "label": "Bracelet + Life Path crystal + support crystal",
+        "include_core_crystal": true,
+        "include_motion_support": true
+      }
+    },
+    "support_crystal_selection": {
+      "max_support_crystals": 1,
+      "strategy": "show_overlap_first_then_motion_list",
+      "overlap_priority": true
+    },
+    "blueprint_output_template": {
+      "fields": [
+        "life_path_number",
+        "life_path_title",
+        "life_path_subtitle",
+        "core_crystal",
+        "motion_state",
+        "support_crystal",
+        "bracelet_style",
+        "meaning_paragraph",
+        "me_affirmations"
+      ],
+      "meaning_paragraph_rules": [
+        "Explain Life Path as how ME learns itself.",
+        "Explain Motion as how ME is moving right now.",
+        "Explain crystals as support (not prediction).",
+        "Keep to 2–4 short sentences."
+      ],
+      "affirmation_rules": [
+        "Always include Life Path ME affirmation.",
+        "If motion chosen, include motion affirmation as second line."
+      ]
+    }
+  }
+}
