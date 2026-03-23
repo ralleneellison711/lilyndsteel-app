@@ -67,6 +67,12 @@ declare module "http" {
 
 // Initialize Stripe on startup
 async function initStripe() {
+  // stripe-replit-sync only works inside Replit — skip on other platforms
+  if (!process.env.REPL_ID) {
+    console.log('Not running in Replit, skipping Stripe sync initialization');
+    return;
+  }
+
   const databaseUrl = process.env.DATABASE_URL;
 
   if (!databaseUrl) {
