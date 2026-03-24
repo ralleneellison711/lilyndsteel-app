@@ -165,7 +165,7 @@ export class DatabaseStorage implements IStorage {
       tulip_root: "/assets/IMG_3234_1769137835687.jpeg",
       lily_witness: "/assets/B9EFC9AF-FFFE-4AAB-9085-F44CF7C1717D_1769291078545.png",
       doublelily_integration: "/assets/507F5AAF-3E05-4EF8-8A89-85F100262F51_1769138066892.png",
-      bloom_bloom: "/assets/1F8D1295-D882-4F33-8E70-4C1CD693FCB1_1769138127734.png",
+      bloom_bloom: "/assets/bloom_bloom_1774385929209.jpeg",
     };
     const existingStyles = await this.getBraceletStyles();
     if (existingStyles.length === 0) {
@@ -177,7 +177,7 @@ export class DatabaseStorage implements IStorage {
       ]);
     } else {
       for (const style of existingStyles) {
-        if (!style.imageUrl && braceletImageMap[style.id]) {
+        if (braceletImageMap[style.id] && style.imageUrl !== braceletImageMap[style.id]) {
           await db.update(braceletStyles).set({ imageUrl: braceletImageMap[style.id] }).where(eq(braceletStyles.id, style.id));
         }
       }
