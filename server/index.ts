@@ -207,9 +207,32 @@ app.use((req, res, next) => {
   next();
 });
 
+// Catch all unhandled errors and log them clearly before crashing
+process.on('uncaughtException', (err) => {
+  console.error('FATAL ERROR:', err.message);
+  console.error('Stack:', err.stack);
+  process.exit(1);
+});
+process.on('unhandledRejection', (reason: any) => {
+  console.error('FATAL UNHANDLED REJECTION:', reason?.message || reason);
+  console.error('Stack:', reason?.stack);
+  process.exit(1);
+});
+
 (async () => {
-  await clearPort(parseInt(process.env.PORT || "5000", 10));
-  await registerRoutes(httpServer, app);
+  try {
+    await clearPort(parseInt(process.env.PORT || "5000", 10));
+  } catch (e: any) {
+    console.warn('clearPort failed (non-fatal):', e.message);
+  }
+  
+  try {
+    await registerRoutes(httpServer, app);
+  } catch (e: any) {
+    console.error('FATAL: registerRoutes failed:', e.message);
+    console.error(e.stack);
+    process.exit(1);
+  }
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
