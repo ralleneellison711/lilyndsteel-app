@@ -10,9 +10,18 @@ if (!process.env.DATABASE_URL) {
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+// Log which database host we're connecting to (without exposing password)
+try {
+  const url = new URL(process.env.DATABASE_URL);
+  console.log(`Connecting to database host: ${url.hostname}:${url.port || 5432}`);
+} catch {
+  console.log('DATABASE_URL is set (could not parse host)');
+}
+
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: isProduction ? { rejectUnauthorized: false } : false,
+  connectionTimeoutMillis: 10000,
 });
 
 export const db = drizzle({ client: pool, schema });
