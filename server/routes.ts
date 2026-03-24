@@ -12,8 +12,23 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  // Seed data on startup
-  await storage.seedData();
+  // Health check endpoint - shows DB status without crashing
+  app.get('/api/health', async (_req, res) => {
+    try {
+      await storage.getBraceletStyles();
+      res.json({ status: 'ok', db: 'connected' });
+    } catch (e: any) {
+      res.json({ status: 'degraded', db: 'error', error: e.message });
+    }
+  });
+
+  // Seed data on startup - non-fatal if DB isn't ready
+  try {
+    await storage.seedData();
+    console.log('Database seeded successfully');
+  } catch (e: any) {
+    console.error('WARNING: seedData failed (app will continue):', e.message);
+  }
 
   // Admin authentication
   app.post(api.admin.verify.path, async (req, res) => {
