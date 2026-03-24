@@ -200,13 +200,13 @@ export class DatabaseStorage implements IStorage {
       rhodonite: "/crystals/rhodonite.jpg",
       amazonite: "/crystals/amazonite.jpg",
       green_aventurine: "/crystals/green_aventurine.jpg",
-      pink_opal: "/crystals/pink_opal.jpg",
+      pink_opal: "/crystals/pink_opal.png",
       labradorite: "/crystals/labradorite.jpg",
       citrine: "/crystals/citrine.jpg",
       carnelian: "/crystals/carnelian.jpg",
-      sunstone: "/crystals/sunstone.jpg",
-      tigers_eye: "/crystals/tigers_eye.jpg",
-      yellow_jade: "/crystals/yellow_jade.jpg",
+      sunstone: "/crystals/sunstone.png",
+      tigers_eye: "/crystals/tigers_eye.png",
+      yellow_jade: "/crystals/yellow_jade.png",
       pyrite: "/crystals/pyrite.jpg",
     };
     const existingCrystals = await this.getCrystals();
@@ -238,7 +238,7 @@ export class DatabaseStorage implements IStorage {
       ]);
     } else {
       for (const crystal of existingCrystals) {
-        if (!crystal.imageUrl && crystalImageMap[crystal.id]) {
+        if (crystalImageMap[crystal.id] && crystal.imageUrl !== crystalImageMap[crystal.id]) {
           await db.update(crystals).set({ imageUrl: crystalImageMap[crystal.id] }).where(eq(crystals.id, crystal.id));
         }
       }
