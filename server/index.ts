@@ -8,6 +8,7 @@ import { getStripeSync, getStripePublishableKey } from './stripeClient';
 import { WebhookHandlers } from './webhookHandlers';
 import { exec, execSync } from "child_process";
 import net from "net";
+import { ensureTablesExist } from "./migrate";
 
 function clearPort(port: number): Promise<void> {
   return new Promise((resolve) => {
@@ -226,6 +227,15 @@ process.on('unhandledRejection', (reason: any) => {
     console.warn('clearPort failed (non-fatal):', e.message);
   }
   
+  // Always ensure database tables exist before starting
+  try {
+    await ensureTablesExist();
+  } catch (e: any) {
+    console.error('FATAL: Could not create database tables:', e.message);
+    console.error(e.stack);
+    process.exit(1);
+  }
+
   try {
     await registerRoutes(httpServer, app);
   } catch (e: any) {
