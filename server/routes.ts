@@ -295,6 +295,24 @@ export async function registerRoutes(
         },
       });
 
+      // Save order to database so admin can track it
+      const orderTotal = lineItems.reduce((sum: number, li: any) => 
+        sum + (li.price_data.unit_amount * (li.quantity || 1)), 0);
+      try {
+        await storage.createOrder({
+          customerEmail: customerEmail || 'unknown',
+          customerName: customerName || 'Unknown',
+          total: orderTotal,
+          items: items.map((i: any) => ({
+            name: i.name,
+            quantity: i.quantity || 1,
+            price: i.price,
+          })),
+        });
+      } catch (orderErr: any) {
+        console.error('Failed to save order (non-fatal):', orderErr.message);
+      }
+
       res.json({ url: session.url, sessionId: session.id });
     } catch (error: any) {
       console.error('Stripe checkout error:', error);
