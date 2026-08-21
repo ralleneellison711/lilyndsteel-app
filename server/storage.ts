@@ -191,7 +191,7 @@ export class DatabaseStorage implements IStorage {
       red_jasper: "/crystals/red_jasper.png",
       black_tourmaline: "/crystals/black_tourmaline.jpg",
       amethyst: "/crystals/amethyst.jpg",
-      selenite: "/crystals/selenite.jpg",
+      selenite: "/crystals/selenite.png",
       clear_quartz: "/crystals/clear_quartz.jpg",
       lepidolite: "/crystals/lepidolite.jpg",
       moonstone: "/crystals/moonstone.jpg",
